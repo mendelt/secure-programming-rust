@@ -32,21 +32,21 @@ title: What can Rust teach us about writing secure code
 
 # Checklists?
 * Input Validation
-* Output encoding
-* Authentication and password management
+* Output Encoding
+* Authentication and Password Management
 * Cryptographic Practices
-* Error handling and Logging
+* Error Handling and Logging
 * etc.
 
 --- 
 ![bg right](img/confused.jpg)
-* Checklists are usefull but;
+* Checklists are useful but;
   * Am I missing anything?
   * Where did these checklists come from anyway?
 * What are we trying to do anyway?
 
 ---
-# My take on Secure programming:
+# My take on secure programming:
 * ### Programming 
   - Write code that can do the stuff you want
 * ### Secure programming
@@ -93,7 +93,7 @@ This will not compile
 fn main() {
     let who: String = "World".to_string();
     greet(who);
-    greet(who);  // You can't do this, who has already moved
+    greet(who);  // You can't do this, `who` has already moved
 }
 ```
 
@@ -192,7 +192,7 @@ fn read_line_from_file(filename: Path) -> Result<String, Error> {
 }
 
 match read_line_from_file("filename.txt") {
-    Ok(line) => println!("the file contained: {}}", line),
+    Ok(line) => println!("the file contained: {}", line);
     Err(error) => //... handle error here...
 }
 ```
