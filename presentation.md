@@ -15,17 +15,14 @@ title: What can Rust teach us about writing secure code
 * ![h:4cm](img/rust.png)
 
 ---
-* Dreamsolution
+![bg right](img/car_charger.jpg)
+- Dreamsolution
 * Tandemdrive
 ---
-* # Today
+- # This talk
   * What is Secure Programming?
   * Show a little bit of Rust
-  * Extract some of the 'patterns'
-* # Goals
-  * Give a deeper understanding on what secure software is
-  * Give some recipes to write more secure code
-  * Make you try my favorite language
+  * Figure out some of the 'patterns'
 
 ---
 # So what is secure programming?
@@ -44,23 +41,20 @@ title: What can Rust teach us about writing secure code
 --- 
 ![bg right](img/confused.jpg)
 * Checklists are usefull but;
-  * Why these?
-  * Am I missing things?
-  * Where do these come from?
-  * What are we trying to achieve anyway?
+  * Am I missing anything?
+  * Where did these checklists come from anyway?
+* What are we trying to do anyway?
 
 ---
-# Secure programming, my definition:
-* ### Programming: Writing code that can do the stuff you want
-* ### Secure programming: Writing code that cannot do anything else
----
-* This is a usefull definition
-  * You can look at small pieces of code and reason them
-  * And then extrapolate to larger pieces of code
+# My take on Secure programming:
+* ### Programming 
+  - Write code that can do the stuff you want
+* ### Secure programming
+  - Write code that cannot do anything else
 
 * But this is hard;
-  * The stuff you do want is bounded
-  * But the amount of stuff you don't want is limitless
+  - The amount of stuff you do want is bounded
+  - But the stuff you don't want is limitless
 ---
 How do we make sure our code cannot do unexpected things
 
@@ -70,7 +64,17 @@ How do we make sure our code cannot do unexpected things
   * Define preconditions, postconditions and invariants
 
 ---
-# An taste of Rust
+# How can Rust help us here?
+* A flexible, expressive type system
+* No undefined behavior in the language
+* No null
+* Ownership, borrow checker and lifetimes
+  * This allows for compiled-in memory management
+  * No data-races, no use-after free, memory safe
+* 'Zero cost abstractions'
+
+---
+# What does this look like?
 ```rust
 fn main() {
     let who: String = "World".to_string();
@@ -81,8 +85,31 @@ fn greet(who: String) {
     println!("Hello {}", who);
 }
 ```
-* No uninitialized variables
-* No undefined behavior in the language
+
+---
+## Ownership, borrow checker and lifetimes
+This will not compile
+```rust
+fn main() {
+    let who: String = "World".to_string();
+    greet(who);
+    greet(who);  // You can't do this, who has already moved
+}
+```
+
+---
+```rust
+greet(&who);  // A reference will 'borrow' the variable
+```
+- References borrow the variable
+  - You can have as many references as you want but they can't outlive the original
+  - And you can't use them to change the original
+
+```rust
+greet(&mut who);  // A reference will 'borrow' the variable
+```
+- Mutable references allow you to change the original
+  - But you can have only one
 ---
 
 ## The type system: Product types
@@ -135,7 +162,14 @@ let list_of_numbers: Vec<i32> = vec![56, -42, 16];
 ```
 
 ---
-## No null, but we do have options
+## No null, but you can wrap things in an Option
+```rust
+enum Option<T> {
+    Some(T),
+    None,
+}
+```
+
 ```rust
 fn greet(name: Option<String>) {
     match name {
@@ -147,6 +181,12 @@ fn greet(name: Option<String>) {
 ---
 ## Error handling: Result type
 ```rust
+enum Result<T, E> {
+    Ok(T),
+    Err(E),
+}
+```
+```rust
 fn read_line_from_file(filename: Path) -> Result<String, Error> {
     // ...
 }
@@ -155,65 +195,47 @@ match read_line_from_file("filename.txt") {
     Ok(line) => println!("the file contained: {}}", line),
     Err(error) => //... handle error here...
 }
-
 ```
----
-```rust
-enum Option<T> {
-    Some(T),
-    None,
-}
-```
-```rust
-enum Result<T, E> {
-    Ok(T),
-    Err(E),
-}
-```
----
-## Ownership, borrow checker and lifetimes
-
 
 ---
 # How does this make Rust 'secure'?
-- Rust gives you the hangover before the party.
-
-The expressive type-system allows you to specify wanted behavior in detail
-The compiler checks 
-
-# Patterns
-
-
-* Make invalid states unrepresentable
-
-
-* Type State
-* Type state
-
-Wrapping resources
-
-
+* Rust gives you the hangover before the party.
+  * Lots of effort to make the compiler happy
+  * Afterwards code often "just runs"
+* Most common security issues are caught at compile time
+  * Lots of other bugs are caught too
+* Pre- and post-conditions can be encoded in types
+* Zero cost abstractions
+  * A lot of checks are done by the compiler and are optimized out
 
 ---
-You get the hangover before the party
+# Patterns
+* 'Make invalid states unrepresentable'
+  * Design your types to only allow valid values
 
-It can take some time to make the compiler happy but you'll be surprised how few errors remain afterwards.
+* Type State
+  * Have different types for the same value in different states
+  * 
+  * Wrap resources in 
 
-More compile-time guarantees means less runtime-checks. Which is better optimization and faster code
+* Token traits (interfaces)
+  * Implement empty interfaces 
+  * 
+
+---
+# 'Get the hangover before the party'
+
+* It can take some time to make the compiler happy but you'll be surprised how few errors remain afterwards.
+
+* More compile-time guarantees means less runtime-checks. Which is better optimization and faster code
 
 ---
 # What about other languages?
-Define pre/post conditions
+Define pre/post conditions for functions
 Figure out how to encode them in your types
 Domain Driven Design
 
 ---
-# Staticly typed languages
-
----
-# Dynamically typed languages
-
-
-
---- Next meetup
-We plan to 
+# Next meetup
+Delft Developers
+- We plan to 
