@@ -136,12 +136,6 @@ impl Drawable for Shape {
 Rust is not object oriented but it does allow for abstractions and inheritance using Traits which are similar to interfaces in other languages.
 
 ---
-## The type system: Generics
-```rust
-let list_of_numbers: Vec<i32> = vec![56, -42, 16];
-```
-
----
 ## No null, but you can wrap things in an Option
 ```rust
 enum Option<T> {
