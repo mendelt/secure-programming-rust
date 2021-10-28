@@ -3,21 +3,22 @@ theme: gaia
 _class: lead
 marp: true
 title: What can Rust teach us about writing secure code
-
+page number: true
 ---
 # What can Rust teach us about writing secure code
 ![bg left](img/rust-language.jpg)
 
 ---
 # Who am I
-* Programmer for 20+ years
-* ![h:4cm](img/csharp.png) ![h:4cm](img/android.png) ![h:4cm](img/python.png) ![h:4cm](img/scala.png)
-* ![h:4cm](img/rust.png)
+![h:4cm](img/csharp.png) ![h:4cm](img/android.png) ![h:4cm](img/python.png) ![h:4cm](img/scala.png)
+
+![h:4cm](img/rust.png)
 
 ---
 ![bg right](img/car_charger.jpg)
-- Dreamsolution
-* Tandemdrive
+![h:6cm](img/logo-dreamsolution.png)
+![h:6cm](img/logo-tandemdrive.jpg)
+
 ---
 - # This talk
   * What is Secure Programming?
@@ -40,9 +41,11 @@ title: What can Rust teach us about writing secure code
 
 --- 
 ![bg right](img/confused.jpg)
-* Checklists are useful but;
+- Checklists are useful but;
   * Am I missing anything?
-  * Where did these checklists come from anyway?
+  * Does this checklist fit my use-case?
+  * Where did these checklists come from?
+
 * What are we trying to do anyway?
 
 ---
@@ -96,8 +99,10 @@ fn main() {
     greet(who);  // You can't do this, `who` has already moved
 }
 ```
+When you 'move' a variable you cannot use it anymore
 
 ---
+But you can borrow
 ```rust
 greet(&who);  // A reference will 'borrow' the variable
 ```
@@ -199,43 +204,58 @@ match read_line_from_file("filename.txt") {
 
 ---
 # How does this make Rust 'secure'?
-* Rust gives you the hangover before the party.
-  * Lots of effort to make the compiler happy
-  * Afterwards code often "just runs"
 * Most common security issues are caught at compile time
-  * Lots of other bugs are caught too
-* Pre- and post-conditions can be encoded in types
+  * No use-after-free
+  * No data-races
+  * No null-reference exceptions
+* Lots of other bugs are caught too
+  * Pre- and post-conditions can be encoded in types
 * Zero cost abstractions
   * A lot of checks are done by the compiler and are optimized out
-
----
-# Patterns
-* 'Make invalid states unrepresentable'
-  * Design your types to only allow valid values
-
-* Type State
-  * Have different types for the same value in different states
-  * 
-  * Wrap resources in 
-
-* Token traits (interfaces)
-  * Implement empty interfaces 
-  * 
-
 ---
 # 'Get the hangover before the party'
 
 * It can take some time to make the compiler happy but you'll be surprised how few errors remain afterwards.
 
-* More compile-time guarantees means less runtime-checks. Which is better optimization and faster code
+* Rust does most of its checks at compile-time. Most of those are optimized out for faster code at runtime.
+---
+
+# Patterns
+What security 'Patterns' can we extract that might be re-usable
 
 ---
-# What about other languages?
+# 'Make invalid states unrepresentable'
+* Design your types to only allow valid values
+* Do not 'stringly' type your application
+
+---
+# Type State
+  * Have different types for the same value in different states
+  * Wrap resources so th
+
+---
+# Token traits (interfaces)
+  * Implement empty interfaces to check properties of 
+
+
+---
+![bg right](img/mrmiyagi.jpg)
+# "Be the borrow checker"
+* Follow resources and their references through your code
+* Where are resources mutated?
+* Can references outlive the originals?
+
+---
+# What about dynamically typed languages?
 Define pre/post conditions for functions
 Figure out how to encode them in your types
 Domain Driven Design
 
 ---
-# Next meetup
-Delft Developers
-- We plan to 
+![bg left](img/meetup.jpeg)
+# Next Meetup
+We plan to organize more of these meetups in and around Delft
+
+Follow Delft Developers on meetup.com
+
+The next meetup is planned for the _**13th of januari**_
