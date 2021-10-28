@@ -215,40 +215,43 @@ match read_line_from_file("filename.txt") {
 # 'Get the hangover before the party'
 
 * It can take some time to make the compiler happy but you'll be surprised how few errors remain afterwards.
-
 * Rust does most of its checks at compile-time. Most of those are optimized out for faster code at runtime.
+* 
 ---
 
 # Patterns
-What security 'Patterns' can we extract that might be re-usable
+What security 'Patterns' can we extract that might be re-usable?
 
 ---
 # 'Make invalid states unrepresentable'
-* Design your types to only allow valid values
-* Do not 'stringly' type your application
-
----
-# Type State
+* Use types to represent your domain
+  * Do not 'stringly' type your application
+  * Define your own 'primitive' types (postal code, ids etc)
+  * Design your types to only allow valid values
+* Type State
   * Have different types for the same value in different states
-  * Wrap resources so th
-
+  * Methods that change the state return the value as a different type
 ---
-# Token traits (interfaces)
-  * Implement empty interfaces to check properties of 
-
+* Wrap resources to limit allowed usage
+  * We already saw the Option and Result type
+  * A Rust Mutex also wraps the value it protects
+* Token traits (interfaces)
+  * Use empty interfaces to 'tag' your variables and types
+  * `Send` and `Sync` in Rust
 
 ---
 ![bg right](img/mrmiyagi.jpg)
 # "Be the borrow checker"
 * Follow resources and their references through your code
-* Where are resources mutated?
-* Can references outlive the originals?
+* Where are references copied and mutated?
+* Can references outlive values?
 
 ---
 # What about dynamically typed languages?
-Define pre/post conditions for functions
-Figure out how to encode them in your types
-Domain Driven Design
+Many of these patterns depend on having a static type-checker
+
+* Use debug-assertions to check invariants, pre- and post-conditions in your code
+* Write 'smoke-tests' to potentially trigger assertions
 
 ---
 ![bg left](img/meetup.jpeg)
