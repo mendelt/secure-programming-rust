@@ -47,18 +47,18 @@ On a product called
 --- 
 ![bg right](img/confused.jpg)
 - Checklists are useful but;
-  * Is your checklist complete?
-  * Does the checklist fit the use-case?
-  * Where did checklists items come from?
+  * Is the checklist complete?
+  * Does the checklist fit your use-case?
+  * Who came up with these checklists items?
 
 * What are we trying to do anyway?
 
 ---
 # My take on secure programming:
 * ### Programming 
-  - Write code that can do the stuff you want
+  - Write code that _can_ do the stuff you want
 * ### Secure programming
-  - Write code that cannot do anything else
+  - Write code that _cannot_ do anything else
 
 * But this is hard;
   - The stuff you want your program to do is bounded
@@ -68,7 +68,7 @@ How do we make sure our code cannot do unexpected things
 
 * Unit tests?
 * Formal verification?
-* Code by Contract (Eiffel)
+* Code by Contract (Eiffel, Bertrand Meyer)
   * Define preconditions, postconditions and invariants
   * and then somehow check these
 
