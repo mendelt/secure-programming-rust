@@ -88,7 +88,6 @@ How do we make sure our code cannot do unexpected things
   * No data-races, no use-after free, memory safe
   * (as long as you don't use the `unsafe` keyword)
 * A flexible, expressive type system
-* 'Zero cost abstractions'
 
 ---
 # And it looks quite familliar at first sight
@@ -264,12 +263,6 @@ What security 'Patterns' can we extract that might be re-usable?
   * `Send` and `Sync` in Rust
 
 ---
-Thank you for listening
-
----
-![bg](img/questions.jpeg)
-
----
 ![bg right](img/mrmiyagi.jpg)
 # "Be the borrow checker"
 * Follow resources and their references through your code
@@ -282,6 +275,9 @@ Many of these patterns depend on having a static type-checker
 
 * Use debug-assertions to check invariants, pre- and post-conditions in your code
 * Write 'smoke-tests' to trigger these assertions
+
+---
+![bg](img/questions.jpeg)
 
 ---
 ![bg left](img/meetup.jpeg)
