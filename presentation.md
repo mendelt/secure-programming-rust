@@ -258,10 +258,16 @@ What security 'Patterns' can we extract that might be re-usable?
 ---
 - Wrap resources to limit allowed usage
   * We already saw the Option and Result type
-  * A Rust Mutex also wraps the value it protects
+  * A Rust Mutex wraps the value it protects so you can only use it after taking a lock
 * Token traits (interfaces)
   * Use empty interfaces to 'tag' your variables and types
   * `Send` and `Sync` in Rust
+
+---
+Thank you for listening
+
+---
+![bg](img/questions.jpeg)
 
 ---
 ![bg right](img/mrmiyagi.jpg)
