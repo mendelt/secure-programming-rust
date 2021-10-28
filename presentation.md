@@ -74,11 +74,11 @@ How do we make sure our code cannot do unexpected things
 
 ---
 - But often this requires us to run external tools
-* Or the checks are done at runtime and only trigger when you're using the code
+* Or the checks are done at runtime and only trigger when you happen to hit an error
 
 * I want to
-  * Just write code
-  * Have the compiler check
+  * Encode my pre-, post-conditions and invarients in my code
+  * Have the compiler check them
 ---
 # How can Rust help us here?
 * No undefined behavior
