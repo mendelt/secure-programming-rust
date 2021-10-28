@@ -231,8 +231,7 @@ greet(&mut who);  // A reference will 'borrow' the variable
   * No null-references
   * No unhandled errors
 * Lots of other bugs are caught too
-  * Pre- and post-conditions can be encoded in types
-* Rust allows you to express 'valid' behavior in types
+  * Pre-, post-conditions and invariants can be encoded in types
   * The compiler can do (limited) static analysis
 
 ---
@@ -272,9 +271,9 @@ What security 'Patterns' can we extract that might be re-usable?
 
 ---
 # What about dynamically typed languages?
-Many of these patterns depend on having a static type-checker
+Many of these patterns depend on having a compiler, but we can 'fake' that (a little bit)
 
-* Use debug-assertions to check invariants, pre- and post-conditions in your code
+* Use debug-assertions to check invariants, pre- and post-conditions
 * Write 'smoke-tests' to trigger these assertions
 
 ---
