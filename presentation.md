@@ -221,14 +221,15 @@ greet(&who);  // A reference will 'borrow' the variable
 greet(&mut who);  // A reference will 'borrow' the variable
 ```
 - Mutable references allow you to change the original
-  - But you can have only one
+  - But you there can be only one
 ---
 
 # How does this make Rust 'secure'?
 * Most common security issues are caught at compile time
   * No use-after-free
   * No data-races
-  * No null-reference exceptions
+  * No null-references
+  * No unhandled errors
 * Lots of other bugs are caught too
   * Pre- and post-conditions can be encoded in types
 * Rust allows you to express 'valid' behavior in types
