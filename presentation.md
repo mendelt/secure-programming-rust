@@ -1,9 +1,8 @@
 ---
 theme: gaia
-_class: lead
 marp: true
 title: What can Rust teach us about writing secure code
-page number: true
+paginate: true
 ---
 # What can Rust teach us about writing secure code
 ![bg left](img/rust-language.jpg)
