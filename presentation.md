@@ -8,14 +8,20 @@ paginate: true
 ![bg left](img/rust-language.jpg)
 
 ---
-# Who am I
+# Who is this guy anyway?
+A background in
 ![h:4cm](img/csharp.png) ![h:4cm](img/android.png) ![h:4cm](img/python.png) ![h:4cm](img/scala.png)
 
+and
 ![h:4cm](img/rust.png)
 
 ---
 ![bg right](img/car_charger.jpg)
+
+I work at
 ![h:6cm](img/logo-dreamsolution.png)
+
+On a product called
 ![h:6cm](img/logo-tandemdrive.jpg)
 
 ---
