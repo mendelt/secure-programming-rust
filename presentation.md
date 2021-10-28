@@ -73,7 +73,7 @@ How do we make sure our code cannot do unexpected things
   * and then somehow check these
 
 ---
-* But often this requires us to run external tools
+- But often this requires us to run external tools
 * Or the checks are done at runtime and only trigger when you're using the code
 
 * I want to
