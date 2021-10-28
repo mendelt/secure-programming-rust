@@ -73,6 +73,13 @@ How do we make sure our code cannot do unexpected things
   * and then somehow check these
 
 ---
+* But often this requires us to run external tools
+* Or the checks are done at runtime and only trigger when you're using the code
+
+* I want to
+  * Just write code
+  * Have the compiler check my code
+---
 # How can Rust help us here?
 * A flexible, expressive type system
 * No undefined behavior
