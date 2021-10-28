@@ -19,10 +19,10 @@ paginate: true
 ![h:6cm](img/logo-tandemdrive.jpg)
 
 ---
-- # This talk
-  * What is Secure Programming?
-  * Show a little bit of Rust
-  * Figure out some of the 'patterns'
+# This talk
+* Introduce Secure Programming?
+* Show a little bit of Rust
+* What 'Patterns' can we re-use in other languages?
 
 ---
 # So what is secure programming?
@@ -41,9 +41,9 @@ paginate: true
 --- 
 ![bg right](img/confused.jpg)
 - Checklists are useful but;
-  * Am I missing anything?
+  * Is your checklist complete?
   * Does this checklist fit my use-case?
-  * Where did these checklists come from?
+  * Where did checklists items come from?
 
 * What are we trying to do anyway?
 
@@ -55,25 +55,26 @@ paginate: true
   - Write code that cannot do anything else
 
 * But this is hard;
-  - The amount of stuff you do want is bounded
+  - The stuff you want your program to do is bounded
   - But the stuff you don't want is limitless
 ---
 How do we make sure our code cannot do unexpected things
 
 * Unit tests?
-* Formal verification
+* Formal verification?
 * Code by Contract (Eiffel)
   * Define preconditions, postconditions and invariants
 
 ---
 # How can Rust help us here?
 * A flexible, expressive type system
-* No undefined behavior in the language
+* No undefined behavior
 * No null
 * Ownership, borrow checker and lifetimes
   * This allows for compiled-in memory management
   * No data-races, no use-after free, memory safe
 * 'Zero cost abstractions'
+* (as long as you don't use the `unsafe` keyword)
 
 ---
 # What does this look like?
@@ -85,6 +86,71 @@ fn main() {
 
 fn greet(who: String) {
     println!("Hello {}", who);
+}
+```
+
+---
+
+## The type system: Product types
+Structs and enums
+```rust
+struct Customer {
+    name: String,
+    address: String,
+    email: String,
+}
+```
+```rust
+let customer = ("Mendelt Siebenga", "Somewhere 42", "mendelt@mendelt.nl");
+let (name, address, email) = customer;
+```
+
+---
+## The type system: Sum types
+
+```rust
+enum Shape {
+    Circle { radius: u32 },
+    Square { width: u32, height: u32 },
+    Text(String),
+    Point,
+}
+```
+This is called a discriminated union
+
+---
+## No null, but you can wrap things in an Option
+```rust
+enum Option<T> {
+    Some(T),
+    None,
+}
+```
+
+```rust
+fn greet(name: Option<String>) {
+    match name {
+        Some(name) => println!("Hello {}", name);
+        None => println!("I don't know who you are but hello anyway");
+    }
+}
+```
+---
+## No exceptions but a Result type
+```rust
+enum Result<T, E> {
+    Ok(T),
+    Err(E),
+}
+```
+```rust
+fn read_line_from_file(filename: Path) -> Result<String, Error> {
+    // ...
+}
+
+match read_line_from_file("filename.txt") {
+    Ok(line) => println!("the file contained: {}", line);
+    Err(error) => //... handle error here...
 }
 ```
 
@@ -116,92 +182,6 @@ greet(&mut who);  // A reference will 'borrow' the variable
   - But you can have only one
 ---
 
-## The type system: Product types
-Structs and enums
-```rust
-struct Customer {
-    name: String,
-    address: String,
-    email: String,
-}
-```
-```rust
-let customer = ("Mendelt Siebenga", "Somewhere 42", "mendelt@mendelt.nl");
-let (name, address, email) = customer;
-```
-
----
-## The type system: Sum types
-
-```rust
-enum Shape {
-    Circle { radius: u32 },
-    Square { width: u32, height: u32 },
-    Text(String),
-    Point,
-}
-```
-This is called a discriminated union
-
----
-
-## The type system: Traits
-```rust
-trait Drawable {
-    fn draw(canvas: Canvas);
-}
-
-impl Drawable for Shape {
-    fn draw(canvas: Canvas) {
-        // ..
-    }
-}
-```
-Rust is not object oriented but it does allow for abstractions and inheritance using Traits which are similar to interfaces in other languages.
-
----
-## The type system: Generics
-```rust
-let list_of_numbers: Vec<i32> = vec![56, -42, 16];
-```
-
----
-## No null, but you can wrap things in an Option
-```rust
-enum Option<T> {
-    Some(T),
-    None,
-}
-```
-
-```rust
-fn greet(name: Option<String>) {
-    match name {
-        Some(name) => println!("Hello {}", name);
-        None => println!("I don't know who you are but hello anyway");
-    }
-}
-```
----
-## Error handling: Result type
-```rust
-enum Result<T, E> {
-    Ok(T),
-    Err(E),
-}
-```
-```rust
-fn read_line_from_file(filename: Path) -> Result<String, Error> {
-    // ...
-}
-
-match read_line_from_file("filename.txt") {
-    Ok(line) => println!("the file contained: {}", line);
-    Err(error) => //... handle error here...
-}
-```
-
----
 # How does this make Rust 'secure'?
 * Most common security issues are caught at compile time
   * No use-after-free
@@ -209,8 +189,9 @@ match read_line_from_file("filename.txt") {
   * No null-reference exceptions
 * Lots of other bugs are caught too
   * Pre- and post-conditions can be encoded in types
-* Zero cost abstractions
-  * A lot of checks are done by the compiler and are optimized out
+* Rust allows you to express 'valid' behavior in types
+  * The compiler can do (limited) static analysis
+
 ---
 # 'Get the hangover before the party'
 
@@ -251,7 +232,7 @@ What security 'Patterns' can we extract that might be re-usable?
 Many of these patterns depend on having a static type-checker
 
 * Use debug-assertions to check invariants, pre- and post-conditions in your code
-* Write 'smoke-tests' to potentially trigger assertions
+* Write 'smoke-tests' to trigger these assertions
 
 ---
 ![bg left](img/meetup.jpeg)
