@@ -91,32 +91,6 @@ fn greet(who: String) {
 ```
 
 ---
-## Ownership, borrow checker and lifetimes
-This will not compile
-```rust
-fn main() {
-    let who: String = "World".to_string();
-    greet(who);
-    greet(who);  // You can't do this, `who` has already moved
-}
-```
-When you 'move' a variable you cannot use it anymore
-
----
-But you can borrow
-```rust
-greet(&who);  // A reference will 'borrow' the variable
-```
-- References borrow the variable
-  - You can have as many references as you want but they can't outlive the original
-  - And you can't use them to change the original
-
-```rust
-greet(&mut who);  // A reference will 'borrow' the variable
-```
-- Mutable references allow you to change the original
-  - But you can have only one
----
 
 ## The type system: Product types
 Structs and enums
@@ -185,7 +159,7 @@ fn greet(name: Option<String>) {
 }
 ```
 ---
-## Error handling: Result type
+## No exceptions but a Result type
 ```rust
 enum Result<T, E> {
     Ok(T),
@@ -204,6 +178,46 @@ match read_line_from_file("filename.txt") {
 ```
 
 ---
+## Ownership, borrow checker and lifetimes
+remember the example hello world program?
+```rust
+fn main() {
+    let who: String = "World".to_string();
+    greet(who);
+}
+
+fn greet(who: String) {
+    println!("Hello {}", who);
+}
+```
+
+---
+This will not compile
+```rust
+fn main() {
+    let who: String = "World".to_string();
+    greet(who);
+    greet(who);  // You can't do this, `who` has already moved
+}
+```
+When you 'move' a variable you cannot use it anymore
+
+---
+But you can borrow
+```rust
+greet(&who);  // A reference will 'borrow' the variable
+```
+- References borrow the variable
+  - You can have as many references as you want but they can't outlive the original
+  - And you can't use them to change the original
+
+```rust
+greet(&mut who);  // A reference will 'borrow' the variable
+```
+- Mutable references allow you to change the original
+  - But you can have only one
+---
+
 # How does this make Rust 'secure'?
 * Most common security issues are caught at compile time
   * No use-after-free
@@ -211,14 +225,15 @@ match read_line_from_file("filename.txt") {
   * No null-reference exceptions
 * Lots of other bugs are caught too
   * Pre- and post-conditions can be encoded in types
-* Zero cost abstractions
-  * A lot of checks are done by the compiler and are optimized out
+* Rust allows you to express 'valid' behavior in types
+  * The compiler can do (limited) static analysis
+
 ---
 # 'Get the hangover before the party'
 
 * It can take some time to make the compiler happy but you'll be surprised how few errors remain afterwards.
-* Rust does most of its checks at compile-time. Most of those are optimized out for faster code at runtime.
-* 
+* Rust does most of its checks at compile-time. Most of those are optimized out for fast code at runtime.
+
 ---
 
 # Patterns
@@ -253,7 +268,7 @@ What security 'Patterns' can we extract that might be re-usable?
 Many of these patterns depend on having a static type-checker
 
 * Use debug-assertions to check invariants, pre- and post-conditions in your code
-* Write 'smoke-tests' to potentially trigger assertions
+* Write 'smoke-tests' to trigger these assertions
 
 ---
 ![bg left](img/meetup.jpeg)
