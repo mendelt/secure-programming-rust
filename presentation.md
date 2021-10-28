@@ -78,17 +78,17 @@ How do we make sure our code cannot do unexpected things
 
 * I want to
   * Just write code
-  * Have the compiler check my code
+  * Have the compiler check
 ---
 # How can Rust help us here?
-* A flexible, expressive type system
 * No undefined behavior
 * No null
 * Ownership, borrow checker and lifetimes
   * This allows for compiled-in memory management
   * No data-races, no use-after free, memory safe
+  * (as long as you don't use the `unsafe` keyword)
+* A flexible, expressive type system
 * 'Zero cost abstractions'
-* (as long as you don't use the `unsafe` keyword)
 
 ---
 # And it looks quite familliar at first sight
@@ -106,7 +106,7 @@ fn greet(who: String) {
 ---
 
 ## The type system: Product types
-Structs and enums
+Structs and tuples
 ```rust
 struct Customer {
     name: String,
@@ -256,7 +256,7 @@ What security 'Patterns' can we extract that might be re-usable?
   * Have different types for the same value in different states
   * Methods that change the state return the value as a different type
 ---
-* Wrap resources to limit allowed usage
+- Wrap resources to limit allowed usage
   * We already saw the Option and Result type
   * A Rust Mutex also wraps the value it protects
 * Token traits (interfaces)
