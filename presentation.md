@@ -16,22 +16,13 @@ and
 ![h:4cm](img/rust.png)
 
 ---
-![bg right](img/car_charger.jpg)
-
-I work at
-![h:6cm](img/logo-dreamsolution.png)
-
-On a product called
-![h:6cm](img/logo-tandemdrive.jpg)
-
----
 # This talk
 * Introduce Secure Programming?
 * Show a little bit of Rust
 * What 'Patterns' can we re-use in other languages?
 
 ---
-# So what is secure programming?
+# What is secure programming?
 
 ---
 ![bg left](img/checklist.jpg)
@@ -47,9 +38,9 @@ On a product called
 --- 
 ![bg right](img/confused.jpg)
 - Checklists are useful but;
-  * Is the checklist complete?
+  * How do we know the checklist is complete?
   * Does the checklist fit your use-case?
-  * Who came up with these checklists items?
+  * Who came up with these checklists?
 
 * What are we trying to do anyway?
 
