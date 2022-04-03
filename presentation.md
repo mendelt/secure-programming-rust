@@ -254,14 +254,7 @@ What security 'Patterns' can we extract that might be re-usable?
   * `Send` and `Sync` in Rust
 
 ---
-![bg right](img/mrmiyagi.jpg)
-# "Be the borrow checker"
-* Follow resources and their references through your code
-* Where are references copied and mutated?
-* Can references outlive values?
-
----
-# What about dynamically typed languages?
+# How about dynamically typed languages?
 Many of these patterns depend on having a compiler, but we can 'fake' that (a little bit)
 
 * Use debug-assertions to check invariants, pre- and post-conditions
@@ -270,11 +263,3 @@ Many of these patterns depend on having a compiler, but we can 'fake' that (a li
 ---
 ![bg](img/questions.jpeg)
 
----
-![bg left](img/meetup.jpeg)
-# Next Meetup
-We plan to organize more of these meetups in and around Delft
-
-Follow Delft Developers on meetup.com
-
-The next meetup is planned for the _**13th of januari**_
