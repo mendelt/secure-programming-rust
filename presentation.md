@@ -4,84 +4,59 @@ marp: true
 title: What can Rust teach us about writing secure code
 paginate: true
 ---
-# What can Rust teach us about writing secure code
+## What can Rust teach us about writing secure code
 ![bg left](img/rust-language.jpg)
 
 ---
-# Who is this guy anyway?
-A background in
-![h:4cm](img/csharp.png) ![h:4cm](img/android.png) ![h:4cm](img/python.png) ![h:4cm](img/scala.png)
+## Goals for this talk
 
-and
-![h:4cm](img/rust.png)
-
----
-# This talk
-* Introduce Secure Programming?
-* Show a little bit of Rust
-* What 'Patterns' can we re-use in other languages?
-
----
-# What is secure programming?
+* Introduce Rust
+* Show what makes Rust a secure language
+* Extract 'Patterns' that you might re-use in other languages
 
 ---
 ![bg left](img/checklist.jpg)
 
-# Checklists?
-* Input Validation
-* Output Encoding
-* Authentication and Password Management
-* Cryptographic Practices
-* Error Handling and Logging
-* etc.
+## What is secure programming?
+
+* Checklists?
+  - OWASP
+  - SEI CERT
+  - etc.
 
 --- 
 ![bg right](img/confused.jpg)
-- Checklists are useful but;
-  * How do we know the checklist is complete?
-  * Does the checklist fit your use-case?
-  * Who came up with these checklists?
+- Checklists are useful but...
+  * Does the checklist fit your use-case and stack?
+  * How do you know you're not missing anything?
+  * They seem kind of arbritrary
 
-* What are we trying to do anyway?
+* Maybe we need some underlying principles
 
 ---
-# My take on secure programming:
+## My take on secure programming:
+
 * ### Programming 
   - Write code that _can_ do the stuff you want
 * ### Secure programming
   - Write code that _cannot_ do anything else
 
-* But this is hard;
-  - The stuff you want your program to do is bounded
-  - But the stuff you don't want is limitless
 ---
-How do we make sure our code cannot do unexpected things
+## How do you prevent unexpected behavior
 
 * Unit tests?
 * Formal verification?
+* Static analysis?
 * Code by Contract (Eiffel, Bertrand Meyer)
   * Define preconditions, postconditions and invariants
   * and then somehow check these
 
 ---
-- But often this requires us to run external tools
-* Or the checks are done at runtime and only trigger when you happen to hit an error
-
-* I want to
-  * Encode my pre-, post-conditions and invarients in my code
-  * Have the compiler check them
----
-# How can Rust help us here?
-* No undefined behavior
-* No null
-* Ownership, borrow checker and lifetimes
-  * This allows for compiled-in memory management
-  * No data-races, no use-after free, memory safe
-  * (as long as you don't use the `unsafe` keyword)
-* A flexible, expressive type system
+## How can your language help you?
+* Lets look at Rust
 
 ---
-# And it looks quite familliar at first sight
+## It looks familiar at first sight
 ```rust
 fn main() {
     let who: String = "World".to_string();
@@ -94,102 +69,8 @@ fn greet(who: String) {
 ```
 
 ---
-
-## The type system: Product types
-Structs and tuples
-```rust
-struct Customer {
-    name: String,
-    address: String,
-    email: String,
-}
-```
-```rust
-let customer = ("Mendelt Siebenga", "Somewhere 42", "mendelt@mendelt.nl");
-let (name, address, email) = customer;
-```
-
----
-## The type system: Sum types
-
-```rust
-enum Shape {
-    Circle { radius: u32 },
-    Square { width: u32, height: u32 },
-    Text(String),
-    Point,
-}
-```
-This is called a discriminated union
-
----
-
-## The type system: Traits
-```rust
-trait Drawable {
-    fn draw(canvas: Canvas);
-}
-
-impl Drawable for Shape {
-    fn draw(canvas: Canvas) {
-        // ..
-    }
-}
-```
-Rust is not object oriented but it does allow for abstractions and inheritance using Traits which are similar to interfaces in other languages.
-
----
-## No null, but you can wrap things in an Option
-```rust
-enum Option<T> {
-    Some(T),
-    None,
-}
-```
-
-```rust
-fn greet(name: Option<String>) {
-    match name {
-        Some(name) => println!("Hello {}", name);
-        None => println!("I don't know who you are but hello anyway");
-    }
-}
-```
----
-## No exceptions but a Result type
-```rust
-enum Result<T, E> {
-    Ok(T),
-    Err(E),
-}
-```
-```rust
-fn read_line_from_file(filename: Path) -> Result<String, Error> {
-    // ...
-}
-
-match read_line_from_file("filename.txt") {
-    Ok(line) => println!("the file contained: {}", line);
-    Err(error) => //... handle error here...
-}
-```
-
----
-## Ownership, borrow checker and lifetimes
-remember the example hello world program?
-```rust
-fn main() {
-    let who: String = "World".to_string();
-    greet(who);
-}
-
-fn greet(who: String) {
-    println!("Hello {}", who);
-}
-```
-
----
-This will not compile
+## But then you run into ownership
+This will not compile:
 ```rust
 fn main() {
     let who: String = "World".to_string();
@@ -211,54 +92,146 @@ greet(&who);  // A reference will 'borrow' the variable
 ```rust
 greet(&mut who);  // A reference will 'borrow' the variable
 ```
-- Mutable references allow you to change the original
-  - But you there can be only one
+- Mutable references do allow you to change the original
+  - But you can only have one
 ---
 
-# How does this make Rust 'secure'?
-* Most common security issues are caught at compile time
-  * No use-after-free
-  * No data-races
-  * No null-references
-  * No unhandled errors
-* Lots of other bugs are caught too
-  * Pre-, post-conditions and invariants can be encoded in types
-  * The compiler can do (limited) static analysis
+## The type system: Product types
+Structs and tuples look familiar
+```rust
+struct Customer {
+    name: String,
+    address: String,
+    email: String,
+}
+```
+```rust
+let customer = ("Mendelt Siebenga", "Somewhere 42", "mendelt@mendelt.nl");
+let (name, address, email) = customer;
+```
 
 ---
-# 'Get the hangover before the party'
+## The type system: Sum types
+Enums are a bit weird and can have payloads
 
-* It can take some time to make the compiler happy but you'll be surprised how few errors remain afterwards.
-* Rust does most of its checks at compile-time. Most of those are optimized out for fast code at runtime.
+```rust
+enum Shape {
+    Circle { radius: u32 },
+    Square { width: u32, height: u32 },
+    Text(String),
+    Point,
+}
+```
 
 ---
 
-# Patterns
+## Add behavior to types with Traits
+```rust
+trait Drawable {
+    fn draw(canvas: Canvas);
+}
+
+impl Drawable for Shape {
+    fn draw(canvas: Canvas) {
+        // ..
+    }
+}
+```
+
+---
+## Generics allow for flexibility
+```rust
+trait Canvas {
+    // ...
+}
+
+trait Drawable<C: Canvas> {
+    fn draw(canvas: C);
+}
+
+impl Drawable for Shape {
+    // ...
+}
+
+```
+
+---
+
+## How does this make Rust 'secure'?
+---
+
+## The ownership model gives memory safety
+* No use-after-free
+* No data-races
+* Allows for "compile-time-garbage-collection"
+
+---
+## No null or exceptions but Option and Result wrappers
+```rust
+enum Option<T> {
+    Some(T),
+    None,
+}
+
+enum Result<T, E> {
+    Ok(T),
+    Err(E),
+}
+```
+---
+## These enforce null and error checks before you can access values
+
+```rust
+fn greet(name: Option<String>) {
+    match name {
+        Some(name) => println!("Hello {}", name);
+        None => println!("I don't know who you are but hello anyway");
+    }
+}
+```
+
+---
+## No null-pointer errors
+- Variables are always initialized
+- Null checks are enforced but only need to be done once
+- No use of uninitialized memory
+## No unhandled exceptions
+- Just like null checks, error handling is enforced
+- But only needs to be done once. The check 'unwraps' the value
+
+---
+
+## Patterns
 What security 'Patterns' can we extract that might be re-usable?
 
 ---
-# 'Make invalid states unrepresentable'
-* Use types to represent your domain
-  * Do not 'stringly' type your application
-  * Define your own 'primitive' types (postal code, ids etc)
-  * Design your types to only allow valid values
-* Type State
-  * Have different types for the same value in different states
-  * Methods that change the state return the value as a different type
+## Make invalid states unrepresentable
+* Design your types around invariants
+* Check pre-conditions in constructors
+* Check post-conditions when converting between types
+
+* Use this for types in your domain
+  - Do not 'Stringly' type your domain model but define different types
+  - Postal code
+  - Telephone number
+  - IP address etc.
 ---
-- Wrap resources to limit allowed usage
-  * We already saw the Option and Result type
-  * A Rust Mutex wraps the value it protects so you can only use it after taking a lock
-* Token traits (interfaces)
-  * Use empty interfaces to 'tag' your variables and types
-  * `Send` and `Sync` in Rust
+## Use Type-State
+* Use different types for values in different states
+* Only allow operations that are valid in that state
+* Method that change the state return a different type
+* Examples:
+  * Option and Result types to enforce error handling and null checks
+  * The Rust Mutex wraps the value it protects so you can only use it after taking a lock
+  * Enforce initialization
 
 ---
-# How about dynamically typed languages?
-Many of these patterns depend on having a compiler, but we can 'fake' that (a little bit)
 
-* Use debug-assertions to check invariants, pre- and post-conditions
-* Write 'smoke-tests' to trigger these assertions
+## Wrapup
+* Use types in your language to encode "contracts"
+* Use the compiler to statically check those contracts
+* Use assertions and smoke-tests if you don't have a compiler
+* Use Rust if you want the extra safety of compile-time memory management
 
 ---
 ![bg](img/questions.jpeg)
