@@ -45,7 +45,6 @@ paginate: true
 ## How do you prevent unexpected behavior
 
 * Unit tests?
-* Formal verification?
 * Static analysis?
 * Code by Contract (Eiffel, Bertrand Meyer)
   * Define preconditions, postconditions and invariants
@@ -231,7 +230,7 @@ What security 'Patterns' can we extract that might be re-usable?
 * Use types in your language to encode "contracts"
 * Use the compiler to statically check those contracts
 * Use assertions and smoke-tests if you don't have a compiler
-* Use Rust if you want the extra safety of compile-time memory management
+* Use Rust if you want the added safety of the compile-time memory management
 
 ---
 ![bg](img/questions.jpeg)
